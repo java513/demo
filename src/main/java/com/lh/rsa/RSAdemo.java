@@ -26,18 +26,31 @@ public class RSAdemo {
 
         PrivateKey privateKey = getPrivateKey(algorithm, "b.pri");
         PublicKey publicKey = getPublicKey(algorithm, "a.pub");
+        //私钥加密
         Cipher cipher = Cipher.getInstance(algorithm);
         cipher.init(Cipher.ENCRYPT_MODE, privateKey);
         byte[] bytes = cipher.doFinal(input.getBytes());
         String encodeStr = Base64.encode(bytes);
-        System.out.println("加密后:"+ encodeStr);
+        System.out.println("私钥加密后:"+ encodeStr);
 
         //公钥解密
         cipher.init(Cipher.DECRYPT_MODE,publicKey);
         byte[] decode = Base64.decode(encodeStr);
         byte[] inputBytes = cipher.doFinal(decode);
 
-        System.out.println("解密后："+new String(inputBytes));
+        System.out.println("私钥加密，公钥解密后："+new String(inputBytes));
+
+        //公钥加密
+        cipher.init(Cipher.ENCRYPT_MODE,publicKey);
+        byte[] bytes1 = cipher.doFinal(input.getBytes());
+        String pubEncode = Base64.encode(bytes1);
+        System.out.println("公钥加密后数据："+pubEncode);
+        //私钥解密
+        cipher.init(Cipher.DECRYPT_MODE,privateKey);
+        byte[] decode1 = Base64.decode(pubEncode);
+        byte[] bytes2 = cipher.doFinal(decode1);
+        System.out.println("公钥加密，私钥解密后:"+new String(bytes2));
+
 
     }
 
